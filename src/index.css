@@ -1,0 +1,109 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================================
+   FINANCY - PREMIUM FINTECH STYLE GUIDE
+   ============================================================================ */
+
+@layer base {
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+  
+  html {
+    scroll-behavior: smooth;
+    height: 100%;
+  }
+
+  body {
+    min-height: 100vh;
+    font-feature-settings: "kern" 1, "liga" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    
+    /* NEW PREMIUM BACKGROUND: Deep Mesh Gradient */
+    background: radial-gradient(circle at 0% 0%, rgba(11, 80, 218, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 100% 100%, rgba(212, 175, 55, 0.05) 0%, transparent 40%),
+                #070b14;
+    
+    /* Safari Mobile Fixes */
+    height: 100dvh; 
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    overscroll-behavior-y: none; 
+  }
+}
+
+@layer components {
+  .page-view {
+    animation: slideUp 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* Enhanced Glassmorphism */
+  .glass-card {
+    @apply bg-card/75 backdrop-blur-[16px] backdrop-saturate-[180%] border border-white/[0.08] shadow-[0_8px_32px_0_rgba(0,0,0,0.37)];
+  }
+
+  .transaction-row {
+    @apply flex justify-between items-center p-5 bg-white/[0.03] rounded-[1.25rem] border border-white/5 transition-all duration-[250ms] ease-[cubic-bezier(0.4,0,0.2,1)];
+  }
+
+  .transaction-row:hover {
+    @apply bg-white/[0.07] scale-[1.015] -translate-y-0.5 border-primary/30;
+  }
+
+  /* SIDEBAR LOGIC */
+  .sidebar-expanded {
+    width: 280px;
+  }
+
+  .sidebar-collapsed {
+    width: 80px;
+  }
+
+  .sidebar-collapsed .sidebar-text {
+    @apply hidden;
+  }
+
+  .sidebar-collapsed .nav-link {
+    @apply justify-center p-4;
+  }
+
+  /* Typography Enhancements */
+  .stat-number {
+    letter-spacing: -0.025em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .select-right-arrow {
+    appearance: none;
+    -webkit-appearance: none;
+    padding-right: 2.5rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='white'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1rem;
+  }
+
+  .nav-link[aria-selected="true"] {
+    @apply relative text-primary bg-primary/10;
+  }
+
+  /* Main content scrolling fix for iPhone */
+  main {
+    -webkit-overflow-scrolling: touch;
+    height: 100%;
+  }
+}
+
+@layer utilities {
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
