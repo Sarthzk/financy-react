@@ -9,13 +9,13 @@ import { RECENT_ENTRIES_LIMIT, exportToCSV, FINTECH_PALETTE } from '../utils/hel
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-export default function DashboardView({ 
-  entries, 
-  totalIncome, 
-  totalExpenses, 
+export default function DashboardView({
+  entries,
+  totalIncome,
+  totalExpenses,
   balance,
   onDeleteEntry,
-  onNotification 
+  onNotification
 }) {
   // Calculate percentages
   const totalFlow = totalIncome + totalExpenses;
@@ -156,4 +156,5 @@ export default function DashboardView({
       </div>
     </div>
   );
-}
+};
+

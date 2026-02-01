@@ -9,6 +9,7 @@ import {
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { auth, db, googleProvider } from '../firebase';
 import { sanitizeInput } from '../utils/helpers';
+import Orb from './ui/Orb';
 
 export default function AuthOverlay({ onError, onSuccess }) {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -77,8 +78,13 @@ export default function AuthOverlay({ onError, onSuccess }) {
   };
 
   return (
-    <div className="fixed inset-0 z-[5000] flex items-center justify-center bg-midnight p-6">
-      <div className="w-full max-w-md space-y-8 glass-card p-8 rounded-[2.5rem]">
+    <>
+      {/* Full-viewport Orb layer so no black patch at bottom */}
+      <div className="fixed inset-0 min-h-[100dvh] z-[4999]">
+        <Orb hue={210} hoverIntensity={0.2} backgroundColor="#070b14" />
+      </div>
+      <div className="fixed inset-0 z-[5000] flex items-center justify-center overflow-hidden p-6 pointer-events-none">
+        <div className="pointer-events-auto w-full max-w-md space-y-8 glass-card p-8 rounded-[2.5rem]">
         {/* Logo */}
         <div className="text-center">
           <div className="w-20 h-20 mx-auto mb-6">
@@ -196,5 +202,6 @@ export default function AuthOverlay({ onError, onSuccess }) {
         </button>
       </div>
     </div>
+    </>
   );
 }

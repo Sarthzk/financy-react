@@ -1,5 +1,6 @@
 import { formatCurrency } from '../utils/helpers';
 
+
 export default function StatsCard({ title, value, percentage, type = 'balance' }) {
   const isBalance = type === 'balance';
   const isIncome = type === 'income';

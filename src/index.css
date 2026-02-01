@@ -107,3 +107,20 @@
     }
   }
 }
+@keyframes shine {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.shiny-text {
+  color: #b5b5b5; /* Base text color */
+  background-clip: text;
+  -webkit-background-clip: text;
+  animation-name: shine;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+.shiny-text.disabled {
+  animation: none;
+}
