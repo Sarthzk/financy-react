@@ -1,3 +1,27 @@
+2️⃣ Expense Tracker with Insights (Not Basic!)
+What Makes It Different
+
+Not just adding expenses — insights & intelligence.
+
+Advanced Features
+
+Category-wise analytics
+
+Monthly trends
+
+Budget alerts
+
+CSV upload
+
+Graphs
+
+Secure auth
+
+Why It Wins
+
+❌ Most students stop at CRUD
+✅ You add analytics + UX + data modeling
+
 # 🚀 Financy React - Complete Migration Guide
 
 Welcome to your migrated **Financy** app! This is a complete port from vanilla JavaScript to **React + Vite**.
