@@ -39,12 +39,16 @@ export default function HistoryView({ entries, onDeleteEntry }) {
     labels: dates,
     datasets: [
       {
-        label: 'Spending',
+        label: 'Daily Spending',
         data: dates.map(date => dailySpending[date]),
         borderColor: '#0B50DA',
         backgroundColor: 'rgba(11, 80, 218, 0.1)',
         tension: 0.4,
-        fill: true
+        fill: true,
+        borderWidth: 2,
+        pointBackgroundColor: '#0B50DA',
+        pointBorderColor: '#ffffff',
+        pointBorderWidth: 2
       }
     ]
   };
@@ -56,43 +60,69 @@ export default function HistoryView({ entries, onDeleteEntry }) {
       legend: {
         display: true,
         labels: {
-          color: '#94a3b8'
+          color: '#6B7280',
+          usePointStyle: true,
+          padding: 16
         }
       }
     },
     scales: {
       x: {
-        ticks: { color: '#94a3b8' },
-        grid: { color: 'rgba(255, 255, 255, 0.05)' }
+        ticks: { color: '#6B7280' },
+        grid: { color: 'rgba(0, 0, 0, 0.05)', drawBorder: false },
+        border: { display: false }
       },
       y: {
-        ticks: { color: '#94a3b8' },
-        grid: { color: 'rgba(255, 255, 255, 0.05)' }
+        ticks: { color: '#6B7280' },
+        grid: { color: 'rgba(0, 0, 0, 0.05)', drawBorder: false },
+        border: { display: false }
       }
     }
   };
 
   return (
     <div className="max-w-5xl mx-auto space-y-8">
+      {/* Header */}
+      <div className="space-y-3 pt-8">
+        <h2 className="text-5xl font-black text-gray-900 dark:text-white tracking-tight leading-tight">
+          History
+        </h2>
+        <p className="text-gray-600 dark:text-gray-400 text-lg font-medium">
+          View all your transactions and spending trends
+        </p>
+      </div>
+
       {/* Daily Spending Trend Chart */}
-      <div className="glass-card p-8 rounded-[2.5rem]">
-        <h3 className="font-bold text-xl mb-6 text-white text-center">
-          Daily Spending Trend
-        </h3>
+      <div className="bg-white dark:bg-slate-800 rounded-2xl p-8 shadow-sm dark:shadow-lg border border-gray-200 dark:border-slate-700 transition-colors">
+        <div className="mb-8">
+          <h3 className="font-bold text-xl text-gray-900 dark:text-white">
+            Daily Spending Trend
+          </h3>
+          <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">
+            Track your daily expenses over time
+          </p>
+        </div>
         {dates.length > 0 ? (
-          <div className="h-[300px] relative">
+          <div className="h-[350px] relative">
             <Line data={lineChartData} options={lineChartOptions} />
           </div>
         ) : (
-          <div className="text-center py-12 text-slate-500 font-medium">
+          <div className="text-center py-16 text-gray-400 dark:text-gray-500 font-medium">
             No spending data available
           </div>
         )}
       </div>
 
       {/* All Transactions */}
-      <div className="glass-card p-8 rounded-[2.5rem]">
-        <h3 className="font-bold text-xl mb-6 text-white">All Transactions</h3>
+      <div className="bg-white dark:bg-slate-800 rounded-2xl p-8 shadow-sm dark:shadow-lg border border-gray-200 dark:border-slate-700 transition-colors">
+        <div className="mb-8">
+          <h3 className="font-bold text-xl text-gray-900 dark:text-white">
+            All Transactions
+          </h3>
+          <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">
+            Complete transaction history
+          </p>
+        </div>
         <TransactionTable transactions={entries} onDelete={onDeleteEntry} />
       </div>
     </div>

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Plus } from 'lucide-react';
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { db, auth } from '../firebase';
 import { sanitizeInput } from '../utils/helpers';
@@ -51,14 +51,14 @@ export default function TransactionForm({ onSuccess, onError }) {
   };
 
   return (
-    <div className="glass-card p-8 rounded-[2.5rem]">
-      <h3 className="font-bold text-xl mb-6 text-white">Quick Entry</h3>
+    <div className="bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-sm dark:shadow-lg border border-gray-200 dark:border-slate-700 transition-colors">
+      <h3 className="font-bold text-xl mb-6 text-gray-900 dark:text-white">Quick Entry</h3>
       
       <form onSubmit={handleSubmit} className="space-y-4">
         <select
           value={type}
           onChange={(e) => setType(e.target.value)}
-          className="w-full p-4 bg-dark border border-border rounded-2xl outline-none focus:border-primary text-white font-medium select-right-arrow"
+          className="w-full p-3 bg-white dark:bg-slate-700 border border-gray-200 dark:border-slate-600 rounded-lg outline-none focus:border-primary text-gray-900 dark:text-white font-medium transition-colors"
         >
           <option value="expense">Expense</option>
           <option value="income">Income</option>
@@ -70,7 +70,7 @@ export default function TransactionForm({ onSuccess, onError }) {
           onChange={(e) => setAmount(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="Amount (₹)"
-          className="w-full p-4 bg-dark border border-border rounded-2xl outline-none focus:border-primary text-white font-medium"
+          className="w-full p-3 bg-white dark:bg-slate-700 border border-gray-200 dark:border-slate-600 rounded-lg outline-none focus:border-primary text-gray-900 dark:text-white font-medium transition-colors"
           disabled={isSubmitting}
         />
         
@@ -80,14 +80,14 @@ export default function TransactionForm({ onSuccess, onError }) {
           onChange={(e) => setCategory(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="Category"
-          className="w-full p-4 bg-dark border border-border rounded-2xl outline-none focus:border-primary text-white font-medium"
+          className="w-full p-3 bg-white dark:bg-slate-700 border border-gray-200 dark:border-slate-600 rounded-lg outline-none focus:border-primary text-gray-900 dark:text-white font-medium transition-colors"
           disabled={isSubmitting}
         />
         
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full bg-white text-dark p-4 rounded-2xl font-bold hover:bg-primary hover:text-white transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full bg-primary hover:bg-blue-700 text-white p-3 rounded-lg font-bold transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
         >
           {isSubmitting ? (
             <>
@@ -95,7 +95,10 @@ export default function TransactionForm({ onSuccess, onError }) {
               <span>Saving...</span>
             </>
           ) : (
-            <span>Save Entry</span>
+            <>
+              <Plus size={20} />
+              <span>Save Entry</span>
+            </>
           )}
         </button>
       </form>

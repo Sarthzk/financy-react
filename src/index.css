@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 /* ============================================================================
-   FINANCY - PREMIUM FINTECH STYLE GUIDE
+   FINANCY - PREMIUM FINTECH STYLE GUIDE - LIGHT & DARK MODE
    ============================================================================ */
 
 @layer base {
@@ -20,16 +20,25 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     
-    /* NEW PREMIUM BACKGROUND: Deep Mesh Gradient */
-    background: radial-gradient(circle at 0% 0%, rgba(11, 80, 218, 0.15) 0%, transparent 40%),
-                radial-gradient(circle at 100% 100%, rgba(212, 175, 55, 0.05) 0%, transparent 40%),
-                #070b14;
+    /* Light mode (default) */
+    background: linear-gradient(135deg, #f5f7fa 0%, #f0f4f8 100%);
+    color: #1f2937;
+    
+    /* Dark mode */
+    @apply dark:bg-slate-950 dark:text-white;
     
     /* Safari Mobile Fixes */
     height: 100dvh; 
     padding-top: env(safe-area-inset-top);
     padding-bottom: env(safe-area-inset-bottom);
     overscroll-behavior-y: none; 
+  }
+
+  /* Dark mode background with gradient */
+  html.dark body {
+    background: radial-gradient(circle at 0% 0%, rgba(11, 80, 218, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 100% 100%, rgba(212, 175, 55, 0.03) 0%, transparent 40%),
+                #0f172a;
   }
 }
 
@@ -38,17 +47,22 @@
     animation: slideUp 0.45s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  /* Enhanced Glassmorphism */
+  /* Enhanced Glassmorphism - Light Mode */
   .glass-card {
-    @apply bg-card/75 backdrop-blur-[16px] backdrop-saturate-[180%] border border-white/[0.08] shadow-[0_8px_32px_0_rgba(0,0,0,0.37)];
+    @apply bg-white/75 backdrop-blur-[16px] border border-gray-200/50 shadow-sm;
+  }
+
+  /* Glassmorphism - Dark Mode */
+  .dark .glass-card {
+    @apply bg-slate-800/75 backdrop-blur-[16px] border border-slate-700/50 shadow-lg;
   }
 
   .transaction-row {
-    @apply flex justify-between items-center p-5 bg-white/[0.03] rounded-[1.25rem] border border-white/5 transition-all duration-[250ms] ease-[cubic-bezier(0.4,0,0.2,1)];
+    @apply flex justify-between items-center p-4 bg-gray-50 dark:bg-slate-700/50 rounded-lg border border-gray-200 dark:border-slate-600 transition-all duration-[250ms] ease-[cubic-bezier(0.4,0,0.2,1)];
   }
 
   .transaction-row:hover {
-    @apply bg-white/[0.07] scale-[1.015] -translate-y-0.5 border-primary/30;
+    @apply bg-gray-100 dark:bg-slate-700 scale-[1.01] border-primary/30;
   }
 
   /* SIDEBAR LOGIC */
@@ -78,20 +92,25 @@
     appearance: none;
     -webkit-appearance: none;
     padding-right: 2.5rem;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='white'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 1rem center;
     background-size: 1rem;
   }
 
   .nav-link[aria-selected="true"] {
-    @apply relative text-primary bg-primary/10;
+    @apply relative text-primary bg-blue-50 dark:bg-primary/10;
   }
 
   /* Main content scrolling fix for iPhone */
   main {
     -webkit-overflow-scrolling: touch;
     height: 100%;
+  }
+
+  /* Smooth transitions for theme switching */
+  * {
+    @apply transition-colors duration-200;
   }
 }
 
@@ -106,21 +125,29 @@
       transform: translateY(0);
     }
   }
-}
-@keyframes shine {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
-}
 
-.shiny-text {
-  color: #b5b5b5; /* Base text color */
-  background-clip: text;
-  -webkit-background-clip: text;
-  animation-name: shine;
-  animation-iteration-count: infinite;
-  animation-timing-function: linear;
-}
+  @keyframes shine {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
 
-.shiny-text.disabled {
-  animation: none;
+  .shiny-text {
+    color: #b5b5b5; /* Base text color */
+    background-clip: text;
+    -webkit-background-clip: text;
+    animation-name: shine;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+  }
+
+  .shiny-text.disabled {
+    animation: none;
+  }
+
+  /* Utility classes for form inputs */
+  input:focus,
+  select:focus,
+  textarea:focus {
+    @apply ring-2 ring-primary/20;
+  }
 }

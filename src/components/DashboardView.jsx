@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
-import { Download } from 'lucide-react';
+import { Download, TrendingUp, TrendingDown, Wallet } from 'lucide-react';
 import StatsCard from './StatsCard';
 import TransactionForm from './TransactionForm';
 import TransactionTable from './TransactionTable';
@@ -53,8 +53,10 @@ export default function DashboardView({
       legend: {
         position: 'bottom',
         labels: {
-          color: '#94a3b8',
-          font: { size: 10 }
+          color: '#6B7280',
+          font: { size: 11, weight: 500 },
+          padding: 16,
+          usePointStyle: true
         }
       }
     }
@@ -71,88 +73,123 @@ export default function DashboardView({
 
   return (
     <div className="space-y-8">
-      {/* Welcome Message */}
-      <div>
-        <h2 className="text-2xl font-bold text-white mb-2">
-          Hi, Welcome to Financy!
+      {/* Header Section */}
+      <div className="space-y-3 pt-8">
+        <h2 className="text-5xl font-black text-gray-900 dark:text-white tracking-tight leading-tight">
+          Dashboard
         </h2>
-        <p className="text-slate-400 font-medium">
-          Track your finances with ease
+        <p className="text-gray-600 dark:text-gray-400 text-lg font-medium">
+          Track and manage your finances in one place
         </p>
       </div>
 
-      {/* Stats Cards */}
+      {/* Stats Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <StatsCard
-          title="Available Balance"
-          value={balance}
-          type="balance"
-        />
-        <StatsCard
-          title="Income"
-          value={totalIncome}
-          percentage={incomePercentage}
-          type="income"
-        />
-        <StatsCard
-          title="Expenses"
-          value={totalExpenses}
-          percentage={expensePercentage}
-          type="expense"
-        />
+        <StatsCard title="Balance" value={balance} type="balance" />
+        <StatsCard title="Income" value={totalIncome} percentage={incomePercentage} type="income" />
+        <StatsCard title="Expenses" value={totalExpenses} percentage={expensePercentage} type="expense" />
       </div>
 
-      {/* Quick Entry & Recent Activity */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <TransactionForm
-          onSuccess={(msg) => onNotification(msg, 'success')}
-          onError={(msg) => onNotification(msg, 'error')}
-        />
+      {/* Charts and Entry Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Chart Section */}
+        <div className="lg:col-span-2 space-y-6">
+          {/* Expense Categories Chart */}
+          <div className="bg-white dark:bg-slate-800 rounded-2xl p-8 shadow-sm dark:shadow-lg border border-gray-200 dark:border-slate-700 transition-colors">
+            <div className="flex items-center justify-between mb-8">
+              <div>
+                <h3 className="font-bold text-xl text-gray-900 dark:text-white">
+                  Expense Breakdown
+                </h3>
+                <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">
+                  Category distribution
+                </p>
+              </div>
+            </div>
+            {chartLabels.length > 0 ? (
+              <div className="h-[320px] relative">
+                <Doughnut data={chartData} options={chartOptions} />
+              </div>
+            ) : (
+              <div className="h-[320px] flex items-center justify-center text-gray-400 dark:text-gray-500">
+                <p>No expense data yet</p>
+              </div>
+            )}
+          </div>
 
-        <div className="glass-card p-8 rounded-[2.5rem] flex flex-col">
-          <h3 className="font-bold text-xl mb-6 text-white">Recent Activity</h3>
-          <div className="flex-grow">
-            <TransactionTable
-              transactions={entries}
-              onDelete={onDeleteEntry}
-              limit={RECENT_ENTRIES_LIMIT}
-            />
+          {/* Quick Stats */}
+          <div className="grid grid-cols-2 gap-4">
+            <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm dark:shadow-lg border border-gray-200 dark:border-slate-700">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-gray-600 dark:text-gray-400 text-sm font-medium">
+                    Total Transactions
+                  </p>
+                  <p className="text-2xl font-bold text-gray-900 dark:text-white mt-2">
+                    {entries.length}
+                  </p>
+                </div>
+                <div className="bg-blue-50 dark:bg-blue-500/10 p-3 rounded-xl">
+                  <Wallet className="text-primary" size={24} />
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm dark:shadow-lg border border-gray-200 dark:border-slate-700">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-gray-600 dark:text-gray-400 text-sm font-medium">
+                    This Month
+                  </p>
+                  <p className="text-2xl font-bold text-gray-900 dark:text-white mt-2">
+                    {entries.filter(e => {
+                      const entryDate = new Date(e.date);
+                      const now = new Date();
+                      return entryDate.getMonth() === now.getMonth() && entryDate.getFullYear() === now.getFullYear();
+                    }).length}
+                  </p>
+                </div>
+                <div className="bg-green-50 dark:bg-green-500/10 p-3 rounded-xl">
+                  <TrendingUp className="text-green-500" size={24} />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
+
+        {/* Quick Entry Form */}
+        <div>
+          <TransactionForm
+            onSuccess={(msg) => onNotification(msg, 'success')}
+            onError={(msg) => onNotification(msg, 'error')}
+          />
+        </div>
       </div>
 
-      {/* Charts & Export */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Expense Breakdown Chart */}
-        <div className="glass-card p-8 rounded-[2.5rem] min-h-[350px]">
-          <h3 className="font-bold text-xl mb-6 text-white text-center">
-            Expense Breakdown
-          </h3>
-          {chartLabels.length > 0 ? (
-            <div className="h-[250px] relative">
-              <Doughnut data={chartData} options={chartOptions} />
-            </div>
-          ) : (
-            <div className="text-center py-12 text-slate-500 font-bold">
-              Add expenses to see breakdown
-            </div>
-          )}
-        </div>
-
-        {/* Export Data */}
-        <div className="glass-card p-8 rounded-[2.5rem] flex flex-col justify-center items-center text-center space-y-4">
-          <h3 className="font-bold text-xl text-white">Export Data</h3>
-          <p className="text-slate-400 text-sm max-w-[250px]">
-            Securely download all your transaction history as a CSV file for your records.
-          </p>
+      {/* Recent Transactions */}
+      <div className="bg-white dark:bg-slate-800 rounded-2xl p-8 shadow-sm dark:shadow-lg border border-gray-200 dark:border-slate-700 transition-colors">
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h3 className="font-bold text-xl text-gray-900 dark:text-white">
+              Recent Transactions
+            </h3>
+            <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">
+              Your latest {RECENT_ENTRIES_LIMIT} entries
+            </p>
+          </div>
           <button
             onClick={handleExport}
-            className="w-full bg-primary hover:bg-blue-700 text-white p-4 rounded-2xl font-bold transition-all flex items-center justify-center gap-3 shadow-lg shadow-blue-500/20"
+            className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-blue-700 transition-colors font-semibold text-sm"
           >
-            <Download size={24} />
-            <span>Download CSV</span>
+            <Download size={16} />
+            Export
           </button>
         </div>
+        <TransactionTable
+          transactions={entries}
+          onDelete={onDeleteEntry}
+          limit={RECENT_ENTRIES_LIMIT}
+        />
       </div>
     </div>
   );

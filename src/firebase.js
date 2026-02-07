@@ -2,13 +2,21 @@ import { initializeApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
+// Firebase configuration using environment variables for security
+// IMPORTANT: All Firebase credentials must be set in .env.local
+// Never commit sensitive keys to version control
+
+if (!import.meta.env.VITE_FIREBASE_API_KEY) {
+  console.warn('⚠️ Missing VITE_FIREBASE_API_KEY in environment variables. Create a .env.local file with your Firebase credentials.');
+}
+
 const firebaseConfig = {
-  apiKey: "AIzaSyCBkgMxamYaXenY3drabt3dE-Dn00g7-dE",
-  authDomain: "financy-ed289.firebaseapp.com",
-  projectId: "financy-ed289",
-  storageBucket: "financy-ed289.firebasestorage.app",
-  messagingSenderId: "1056980551616",
-  appId: "1:1056980551616:web:2182efdbb32681099a2a25"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID
 };
 
 const app = initializeApp(firebaseConfig);
