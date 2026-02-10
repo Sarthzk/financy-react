@@ -12,7 +12,7 @@ import {
   Filler
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import { Calendar, Filter } from 'lucide-react';
+import { Calendar, Filter, BarChart3, TrendingUp, TrendingDown, Wallet } from 'lucide-react';
 import TransactionTable from './TransactionTable';
 import { formatCurrency } from '../utils/helpers';
 
@@ -145,7 +145,7 @@ export default function HistoryView({ entries, onDeleteEntry }) {
             <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent rounded-xl"></div>
             <div className="relative space-y-3">
               <div className="w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center">
-                <span className="text-lg font-bold text-blue-600">📊</span>
+                <BarChart3 size={20} className="text-blue-600" />
               </div>
               <div>
                 <p className="text-xs text-gray-600 dark:text-gray-400 font-semibold uppercase tracking-wider">Total Transactions</p>
@@ -159,7 +159,7 @@ export default function HistoryView({ entries, onDeleteEntry }) {
             <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 to-transparent rounded-xl"></div>
             <div className="relative space-y-3">
               <div className="w-10 h-10 rounded-lg bg-green-500/10 flex items-center justify-center">
-                <span className="text-lg font-bold">📈</span>
+                <TrendingUp size={20} className="text-green-600" />
               </div>
               <div>
                 <p className="text-xs text-gray-600 dark:text-gray-400 font-semibold uppercase tracking-wider">Total Income</p>
@@ -173,7 +173,7 @@ export default function HistoryView({ entries, onDeleteEntry }) {
             <div className="absolute inset-0 bg-gradient-to-br from-red-500/5 to-transparent rounded-xl"></div>
             <div className="relative space-y-3">
               <div className="w-10 h-10 rounded-lg bg-red-500/10 flex items-center justify-center">
-                <span className="text-lg font-bold">📉</span>
+                <TrendingDown size={20} className="text-red-600" />
               </div>
               <div>
                 <p className="text-xs text-gray-600 dark:text-gray-400 font-semibold uppercase tracking-wider">Total Expenses</p>
@@ -187,7 +187,7 @@ export default function HistoryView({ entries, onDeleteEntry }) {
             <div className={`absolute inset-0 bg-gradient-to-br ${stats.balance >= 0 ? 'from-emerald-500/5' : 'from-orange-500/5'} to-transparent rounded-xl`}></div>
             <div className="relative space-y-3">
               <div className={`w-10 h-10 rounded-lg ${stats.balance >= 0 ? 'bg-emerald-500/10' : 'bg-orange-500/10'} flex items-center justify-center`}>
-                <span className="text-lg font-bold">{stats.balance >= 0 ? '💰' : '⚠️'}</span>
+                <Wallet size={20} className={stats.balance >= 0 ? 'text-emerald-600' : 'text-orange-600'} />
               </div>
               <div>
                 <p className="text-xs text-gray-600 dark:text-gray-400 font-semibold uppercase tracking-wider">Net Balance</p>
@@ -215,7 +215,7 @@ export default function HistoryView({ entries, onDeleteEntry }) {
             </div>
           ) : (
             <div className="text-center py-20">
-              <p className="text-gray-500 dark:text-gray-400 font-medium text-lg">📭 No spending data available</p>
+              <p className="text-gray-500 dark:text-gray-400 font-medium text-lg">No spending data available</p>
             </div>
           )}
         </div>

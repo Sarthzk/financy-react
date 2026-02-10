@@ -7,7 +7,7 @@ export default function TransactionTable({ transactions, onDelete, limit = null 
   if (displayTransactions.length === 0) {
     return (
       <div className="text-center py-16">
-        <p className="text-gray-500 dark:text-gray-400 font-semibold text-lg">📭 No transactions found</p>
+        <p className="text-gray-500 dark:text-gray-400 font-semibold text-lg">No transactions found</p>
         <p className="text-gray-400 dark:text-gray-500 text-sm mt-2">Try adjusting your filters</p>
       </div>
     );
