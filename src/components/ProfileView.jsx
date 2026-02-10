@@ -3,6 +3,7 @@ import { CheckCircle, Shield, Calendar, TrendingUp, PiggyBank } from 'lucide-rea
 import { useEffect, useState } from 'react';
 import { collection, query, where, onSnapshot } from 'firebase/firestore';
 import { db } from '../firebase';
+import { normalizeCategoryKey } from '../utils/helpers';
 
 export default function ProfileView(props) {
   const { user } = useAuth();
@@ -57,8 +58,9 @@ export default function ProfileView(props) {
 
   // Calculate total savings goal
   const totalSavingsGoal = budgets.reduce((sum, budget) => {
+    const budgetCatKey = normalizeCategoryKey(budget.category);
     const spent = entries
-      .filter(e => e.category === budget.category && e.type === 'expense')
+      .filter(e => normalizeCategoryKey(e.category || 'Uncategorized') === budgetCatKey && e.type === 'expense')
       .reduce((s, e) => s + parseFloat(e.amount || 0), 0);
     const limit = parseFloat(budget.limit || 0);
     return sum + (limit - spent);

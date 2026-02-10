@@ -115,7 +115,7 @@ export default function AuthOverlay({ onError, onSuccess, onBack }) {
           {/* Back Button */}
           <button
             onClick={onBack}
-            className="absolute top-6 left-6 p-2 rounded-full hover:bg-slate-700 transition-all text-slate-400 hover:text-white"
+            className="absolute top-6 left-6 p-2 rounded-full hover:bg-gray-200 dark:hover:bg-slate-700 transition-all text-gray-600 dark:text-slate-400 hover:text-gray-800 dark:hover:text-white"
             aria-label="Back to landing page"
           >
             <ArrowLeft size={24} />
@@ -126,8 +126,8 @@ export default function AuthOverlay({ onError, onSuccess, onBack }) {
             <div className="flex justify-center mb-6">
               <Logo size="xl" showText={false} />
             </div>
-            <h1 className="text-3xl font-bold tracking-tight text-white">Financy</h1>
-            <p className="text-slate-400 mt-2 font-medium">
+            <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">Financy</h1>
+            <p className="text-gray-600 dark:text-slate-400 mt-2 font-medium">
               Master your money, one entry at a time.
             </p>
           </div>
@@ -139,7 +139,7 @@ export default function AuthOverlay({ onError, onSuccess, onBack }) {
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="w-full bg-dark border border-border p-4 rounded-xl outline-none focus:border-primary transition-all text-white font-medium"
+                className="w-full bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-700 p-4 rounded-xl outline-none focus:border-primary transition-all text-gray-900 dark:text-white font-medium placeholder:text-gray-500 dark:placeholder:text-gray-400"
                 placeholder="Your Name"
               />
             )}
@@ -149,7 +149,7 @@ export default function AuthOverlay({ onError, onSuccess, onBack }) {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               onKeyDown={handleKeyDown}
-              className="w-full bg-dark border border-border p-4 rounded-xl outline-none focus:border-primary transition-all text-white font-medium"
+              className="w-full bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-700 p-4 rounded-xl outline-none focus:border-primary transition-all text-gray-900 dark:text-white font-medium placeholder:text-gray-500 dark:placeholder:text-gray-400"
               placeholder="Email"
               required
               autoComplete="email"
@@ -160,7 +160,7 @@ export default function AuthOverlay({ onError, onSuccess, onBack }) {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               onKeyDown={handleKeyDown}
-              className="w-full bg-dark border border-border p-4 rounded-xl outline-none focus:border-primary transition-all text-white font-medium"
+              className="w-full bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-700 p-4 rounded-xl outline-none focus:border-primary transition-all text-gray-900 dark:text-white font-medium placeholder:text-gray-500 dark:placeholder:text-gray-400"
               placeholder="Password"
               required
             />
@@ -182,7 +182,7 @@ export default function AuthOverlay({ onError, onSuccess, onBack }) {
           </form>
 
           {/* Toggle Auth Mode */}
-          <p className="text-center text-sm text-slate-500 font-medium">
+          <p className="text-center text-sm text-gray-600 dark:text-slate-400 font-medium">
             <span>{isSignUp ? 'Already have an account?' : 'New here?'}</span>{' '}
             <button
               onClick={() => setIsSignUp(!isSignUp)}
@@ -196,10 +196,10 @@ export default function AuthOverlay({ onError, onSuccess, onBack }) {
           {/* Divider */}
           <div className="relative py-4">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-border"></div>
+              <div className="w-full border-t border-gray-300 dark:border-slate-700"></div>
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-card px-2 text-slate-500 font-bold">OR</span>
+              <span className="bg-white dark:bg-slate-800 px-2 text-gray-600 dark:text-slate-400 font-bold">OR</span>
             </div>
           </div>
 
@@ -207,7 +207,7 @@ export default function AuthOverlay({ onError, onSuccess, onBack }) {
           <button
             onClick={handleGoogleLogin}
             disabled={isLoading}
-            className="w-full bg-card border border-border p-4 rounded-xl flex items-center justify-center gap-3 hover:bg-slate-800 transition-all disabled:opacity-50"
+            className="w-full bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-700 p-4 rounded-xl flex items-center justify-center gap-3 hover:bg-gray-100 dark:hover:bg-slate-700 transition-all disabled:opacity-50"
             type="button"
           >
             <img
@@ -215,7 +215,7 @@ export default function AuthOverlay({ onError, onSuccess, onBack }) {
               width="20"
               alt="Google"
             />
-            <span className="font-bold text-white">Continue with Google</span>
+            <span className="font-bold text-gray-900 dark:text-white">Continue with Google</span>
           </button>
         </div>
       </div>

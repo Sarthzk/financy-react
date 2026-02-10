@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react';
 import { Upload, FileUp, CheckCircle, AlertCircle } from 'lucide-react';
-import { formatCurrency } from '../utils/helpers';
+import { formatCurrency, getDisplayCategory } from '../utils/helpers';
 
 export default function CSVImport({ onImport, onNotification }) {
   const [isLoading, setIsLoading] = useState(false);
@@ -65,7 +65,7 @@ export default function CSVImport({ onImport, onNotification }) {
         data.push({
           date: row.date,
           type: row.type.toLowerCase(),
-          category: row.category,
+          category: getDisplayCategory(row.category),
           amount: amount,
           description: row.description || ''
         });

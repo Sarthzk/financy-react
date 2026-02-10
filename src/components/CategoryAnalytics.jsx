@@ -2,21 +2,24 @@ import { useMemo } from 'react';
 import { Chart as ChartJS, ArcElement, BarElement, CategoryScale, LinearScale, Tooltip, Legend } from 'chart.js';
 import { Pie, Bar } from 'react-chartjs-2';
 import { TrendingUp, TrendingDown } from 'lucide-react';
-import { FINTECH_PALETTE, formatCurrency } from '../utils/helpers';
+import { FINTECH_PALETTE, formatCurrency, getDisplayCategory, normalizeCategoryKey } from '../utils/helpers';
 
 ChartJS.register(ArcElement, BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
 export default function CategoryAnalytics({ entries }) {
-  const { categoryData, totalByCategory, chartDataPie, chartDataBar, topCategory, categoryTrends } = useMemo(() => {
+  const { categoryData, totalByCategory, chartDataPie, chartDataBar, topCategory, topExpenseAmount, categoryTrends } = useMemo(() => {
     const categoryBreakdown = {};
     const categoryCount = {};
+    const categoryDisplayNames = {};
 
-    // Separate income and expenses by category
+    // Separate income and expenses by category (using normalized keys)
     const incomeCategories = {};
     const expenseCategories = {};
 
     entries.forEach(entry => {
-      const category = entry.category || 'Uncategorized';
+      const catDisplay = entry.category || 'Uncategorized';
+      const category = normalizeCategoryKey(catDisplay);
+      categoryDisplayNames[category] = getDisplayCategory(catDisplay);
       
       if (entry.type === 'income') {
         incomeCategories[category] = (incomeCategories[category] || 0) + entry.amount;
@@ -30,12 +33,19 @@ export default function CategoryAnalytics({ entries }) {
 
     // Combine for total
     const totalByCategory = { ...incomeCategories, ...expenseCategories };
+    
+    // Sort by total for bar chart
     const labels = Object.keys(totalByCategory).sort((a, b) => totalByCategory[b] - totalByCategory[a]);
     
+    // Get top EXPENSE category (sorted by expenses only)
+    const expenseLabels = Object.keys(expenseCategories).sort((a, b) => expenseCategories[b] - expenseCategories[a]);
+    const topExpenseCat = expenseLabels[0] || null;
+    const topCat = topExpenseCat ? categoryDisplayNames[topExpenseCat] : 'N/A';
+    const topExpenseAmount = topExpenseCat ? expenseCategories[topExpenseCat] : 0;
+    
     // Pie chart data (expenses only for clarity)
-    const expenseLabels = Object.keys(expenseCategories);
     const pieData = {
-      labels: expenseLabels,
+      labels: expenseLabels.map(cat => categoryDisplayNames[cat]),
       datasets: [
         {
           data: expenseLabels.map(cat => expenseCategories[cat]),
@@ -47,7 +57,7 @@ export default function CategoryAnalytics({ entries }) {
 
     // Bar chart data (all transactions)
     const barData = {
-      labels,
+      labels: labels.map(cat => categoryDisplayNames[cat]),
       datasets: [
         {
           label: 'Income',
@@ -66,9 +76,8 @@ export default function CategoryAnalytics({ entries }) {
       ]
     };
 
-    const topCat = labels[0] || 'N/A';
     const trends = labels.map(cat => ({
-      name: cat,
+      name: categoryDisplayNames[cat],
       income: incomeCategories[cat] || 0,
       expenses: expenseCategories[cat] || 0,
       net: (incomeCategories[cat] || 0) - (expenseCategories[cat] || 0),
@@ -81,6 +90,7 @@ export default function CategoryAnalytics({ entries }) {
       chartDataPie: pieData,
       chartDataBar: barData,
       topCategory: topCat,
+      topExpenseAmount,
       categoryTrends: trends
     };
   }, [entries]);
@@ -133,7 +143,7 @@ export default function CategoryAnalytics({ entries }) {
           </div>
           <p className="text-2xl font-bold text-gray-900 dark:text-white">{topCategory}</p>
           <p className="text-sm text-gray-500 dark:text-gray-500 mt-2">
-            {formatCurrency(categoryData[topCategory] || 0)}
+            {formatCurrency(topExpenseAmount || 0)}
           </p>
         </div>
 

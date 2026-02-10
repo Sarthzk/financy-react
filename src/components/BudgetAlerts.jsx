@@ -1,29 +1,42 @@
 import { useState, useMemo } from 'react';
 import { AlertCircle, TrendingDown, Plus, Trash2, AlertTriangle } from 'lucide-react';
-import { formatCurrency } from '../utils/helpers';
+import { formatCurrency, getDisplayCategory, normalizeCategoryKey } from '../utils/helpers';
+
+// Helper to capitalize category names for display
+const formatCategoryName = (category) => {
+  return getDisplayCategory(category);
+};
 
 export default function BudgetAlerts({ entries, onNotification }) {
   const [budgets, setBudgets] = useState({});
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({ category: '', limit: '' });
 
-  // Get unique categories from expenses
+  // Get unique categories from expenses (case-insensitive deduplication with normalized names)
   const categories = useMemo(() => {
-    const cats = new Set();
+    const catMap = new Map();
     entries
       .filter(e => e.type === 'expense')
-      .forEach(e => cats.add(e.category || 'Uncategorized'));
-    return Array.from(cats).sort();
+      .forEach(e => {
+        const cat = e.category || 'Uncategorized';
+        const catKey = normalizeCategoryKey(cat);
+        if (!catMap.has(catKey)) {
+          // Store normalized category name (title case)
+          catMap.set(catKey, getDisplayCategory(cat));
+        }
+      });
+    return Array.from(catMap.values()).sort();
   }, [entries]);
 
-  // Calculate current spending per category
+  // Calculate current spending per category (normalized to lowercase)
   const currentSpending = useMemo(() => {
     const spending = {};
     entries
       .filter(e => e.type === 'expense')
       .forEach(e => {
         const cat = e.category || 'Uncategorized';
-        spending[cat] = (spending[cat] || 0) + e.amount;
+        const catKey = normalizeCategoryKey(cat);
+        spending[catKey] = (spending[catKey] || 0) + e.amount;
       });
     return spending;
   }, [entries]);
@@ -61,9 +74,10 @@ export default function BudgetAlerts({ entries, onNotification }) {
       return;
     }
 
+    const catKey = normalizeCategoryKey(formData.category);
     setBudgets(prev => ({
       ...prev,
-      [formData.category]: limit
+      [catKey]: limit
     }));
 
     onNotification(`Budget set for ${formData.category}`, 'success');
@@ -72,9 +86,10 @@ export default function BudgetAlerts({ entries, onNotification }) {
   };
 
   const handleRemoveBudget = (category) => {
+    const catKey = normalizeCategoryKey(category);
     setBudgets(prev => {
       const updated = { ...prev };
-      delete updated[category];
+      delete updated[catKey];
       return updated;
     });
     onNotification(`Budget removed for ${category}`, 'success');
@@ -112,7 +127,7 @@ export default function BudgetAlerts({ entries, onNotification }) {
               >
                 <option value="">Select Category</option>
                 {categories.map(cat => (
-                  <option key={cat} value={cat}>{cat}</option>
+                  <option key={cat.toLowerCase()} value={cat.toLowerCase()}>{cat}</option>
                 ))}
               </select>
 

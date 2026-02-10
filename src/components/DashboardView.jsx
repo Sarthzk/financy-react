@@ -5,7 +5,7 @@ import { Download, TrendingUp, TrendingDown, Wallet } from 'lucide-react';
 import StatsCard from './StatsCard';
 import TransactionForm from './TransactionForm';
 import TransactionTable from './TransactionTable';
-import { RECENT_ENTRIES_LIMIT, exportToCSV, FINTECH_PALETTE } from '../utils/helpers';
+import { RECENT_ENTRIES_LIMIT, exportToCSV, FINTECH_PALETTE, getDisplayCategory, normalizeCategoryKey } from '../utils/helpers';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -18,25 +18,28 @@ export default function DashboardView({
   onNotification
 }) {
   // Calculate percentages
-  const totalFlow = totalIncome + totalExpenses;
-  const incomePercentage = totalFlow ? Math.round((totalIncome / totalFlow) * 100) : 0;
-  const expensePercentage = totalFlow ? Math.round((totalExpenses / totalFlow) * 100) : 0;
+  const incomePercentage = totalIncome || totalExpenses ? Math.round((totalIncome / (totalIncome + totalExpenses)) * 100) : 0;
+  const expensePercentage = totalIncome || totalExpenses ? Math.round((totalExpenses / (totalIncome + totalExpenses)) * 100) : 0;
 
   // Calculate category breakdown and chart data (memoized to avoid recreating on every render)
   const { chartLabels, chartData } = useMemo(() => {
     const categoryData = {};
+    const categoryDisplayNames = {};
     entries.forEach(entry => {
       if (entry.type === 'expense') {
-        categoryData[entry.category] = (categoryData[entry.category] || 0) + entry.amount;
+        const catDisplay = entry.category || 'Uncategorized';
+        const category = normalizeCategoryKey(catDisplay);
+        categoryDisplayNames[category] = getDisplayCategory(catDisplay);
+        categoryData[category] = (categoryData[category] || 0) + entry.amount;
       }
     });
 
     const labels = Object.keys(categoryData);
     const data = {
-      labels,
+      labels: labels.map(cat => categoryDisplayNames[cat]),
       datasets: [
         {
-          data: Object.values(categoryData),
+          data: labels.map(cat => categoryData[cat]),
           backgroundColor: labels.map((_, i) => FINTECH_PALETTE[i % FINTECH_PALETTE.length]),
           borderWidth: 0
         }

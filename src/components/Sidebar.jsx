@@ -160,7 +160,7 @@ export default function Sidebar({ currentPage, onPageChange }) {
         {/* Logout Button */}
         <button
           onClick={handleLogout}
-          className="w-full flex items-center gap-4 p-4 bg-red-50 dark:bg-red-500/10 text-red-500 rounded-xl font-bold hover:bg-red-100 dark:hover:bg-red-500 dark:hover:text-white transition-all overflow-hidden"
+          className="relative z-50 w-full flex items-center gap-4 p-4 bg-red-50 dark:bg-red-500/10 text-red-500 rounded-xl font-bold hover:bg-red-100 dark:hover:bg-red-500 dark:hover:text-white transition-all overflow-visible"
           title="Logout"
         >
           <LogOut size={20} />

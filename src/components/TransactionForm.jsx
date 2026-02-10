@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Loader2, Plus } from 'lucide-react';
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { db, auth } from '../firebase';
-import { sanitizeInput } from '../utils/helpers';
+import { sanitizeInput, getDisplayCategory, normalizeCategoryKey } from '../utils/helpers';
 
 export default function TransactionForm({ onSuccess, onError }) {
   const [type, setType] = useState('expense');
@@ -25,7 +25,7 @@ export default function TransactionForm({ onSuccess, onError }) {
         uid: auth.currentUser.uid,
         type,
         amount: parseFloat(amount),
-        category: sanitizeInput(category),
+        category: getDisplayCategory(sanitizeInput(category)),
         date: new Date().toISOString().split('T')[0],
         createdAt: serverTimestamp()
       });

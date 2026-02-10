@@ -32,6 +32,10 @@ export function getDisplayCategory(category) {
     .join(' ');
 }
 
+export function normalizeCategoryKey(category) {
+  return category ? category.toLowerCase().trim() : 'uncategorized';
+}
+
 export function getCategoryColor(category, categoryColorMap) {
   if (!categoryColorMap[category]) {
     const index = Object.keys(categoryColorMap).length % FINTECH_PALETTE.length;
